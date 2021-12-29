@@ -1,117 +1,102 @@
 <template>
-    <v-container > 
-        <p class="text-uppercase text-center class=pa-10 mt-12 mb-2 font-weight-bold " >
-            BELUM PUNYA AKUN ?
-        </p>
-            
-        <v-row
-            align="center" justify="center" class="text-center"
-            no-gutters
-        >
-            <v-col
-                md ="5"
-            >
-                <v-card
-                    class="pa-12 mt-12 mb-10"
-                    outlined
-                    tile
-                >
-                    <v-form
-                        ref="form"
-                        v-model="valid"
-                        lazy-validation
-                    >
-                    <v-text-field
-                        v-model="name"
-                        :rules="nameRules"
-                        label="Name"
-                        required
-                    ></v-text-field>
+  <v-container>
+    <p
+      class="text-uppercase text-center class=pa-10 mt-12 mb-2 font-weight-bold"
+    >
+      BELUM PUNYA AKUN ?
+    </p>
 
-                    <v-text-field
-                        v-model="email"
-                        :rules="emailRules"
-                        label="Email"
-                        required
-                    ></v-text-field>
+    <v-row align="center" justify="center" class="text-center" no-gutters>
+      <v-col md="5">
+        <v-card class="pa-12 mt-12 mb-10" outlined tile>
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-text-field
+              v-model="name"
+              :rules="nameRules"
+              label="Name"
+              required
+            ></v-text-field>
 
-                    <v-text-field
-                        v-model="password"
-                        :rules="passwordRules"
-                        label="Password"
-                        required
-                    ></v-text-field>
+            <v-text-field
+              v-model="email"
+              :rules="emailRules"
+              label="Email"
+              required
+            ></v-text-field>
 
-                    <v-btn
-                        color="error"
-                        class="mr-4"
-                        @click="Register"
-                    >
-                        Register
-                    </v-btn>
+            <v-text-field
+              v-model="password"
+              :rules="passwordRules"
+              type="password"
+              label="Password"
+              required
+            ></v-text-field>
 
-                    </v-form>
-                </v-card>
-            </v-col>
-        </v-row>
-    </v-container> 
+            <v-btn color="error" class="mr-4" @click="Register">
+              Register
+            </v-btn>
+          </v-form>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import axios from 'axios'
-    export default {
-        data: () => ({
-            valid: true,
+import axios from "axios";
+export default {
+  data: () => ({
+    valid: true,
 
-            name: '',
-            nameRules: [
-                v => !!v || 'Name is required',
-                v => /.+@.+\..+/.test(v) || 'Name must be valid',
-            ],
-            
-            email: '',
-            emailRules: [
-                v => !!v || 'E-mail is required',
-                v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-            ],
+    name: "",
+    nameRules: [
+      (v) => !!v || "Name is required",
+      (v) =>  (v && v.length >= 4) || "Name must be 4 characters",
+    ],
 
-            password: '',
-            passwordRules: [
-                v => !!v || 'Password minimum 8 characters',
-                v => (v && v.length <= 8) || 'password must be 8 characters',
-            ],
+    email: "",
+    emailRules: [
+      (v) => !!v || "E-mail is required",
+      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+    ],
 
-        }),
+    password: "",
+    passwordRules: [
+      (v) => !!v || "Password minimum 8 characters",
+      (v) => (v && v.length >= 8) || "password must be 8 characters",
+    ],
+  }),
 
-        methods: {
-            Register () {
-                let config = {
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                    }
-                }
-                
-                let data = {
-                    "name": this.name,
-                    "email": this.email,
-                    "password":this.password,
-                }
-        
-        axios.post('http://localhost:8005/api/register', data, config)
-        .then(response => {
-            console.log(response);
-            if (response.status == 200){
-                alert("Pendaftaran Berhasil")
-                this.$router.push('/login')
-            }
-
-        })
-        
-        .catch(error => {
-            console.log(error);
-        });
-
-            },
+  methods: {
+    Register() {
+      let config = {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
         },
-    }
+      };
+
+      //payload
+      let payload = {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+      };
+
+      axios
+        .post("http://localhost:8005/api/register", payload, config)
+        .then((response) => {
+          console.log(response);
+          if (response.status == 200) {
+            alert(`Pendaftaran atas nama ${response.data.name} Berhasil`);
+            this.$router.push("/login");
+          }
+        })
+
+        .catch((error) => {
+          alert("Pendaftaran Gagal!");
+          console.log(error);
+        });
+    },
+  },
+};
 </script>

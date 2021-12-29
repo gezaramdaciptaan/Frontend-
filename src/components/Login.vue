@@ -32,6 +32,7 @@
                     <v-text-field
                         v-model="password"
                         :rules="passwordRules"
+                        type="password"
                         label="Password"
                          required
                     ></v-text-field>
@@ -75,6 +76,7 @@ import axios from 'axios'
                 let config = {
                     headers: {
                      "Access-Control-Allow-Origin": "*",
+                    //  "Bearer token": localStorage.getItem('token') //eyJd.alsdkjalksdpoier
                     }
                 }
 
